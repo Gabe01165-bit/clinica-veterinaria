@@ -1,4 +1,3 @@
-DELETE FROM produto
-WHERE tipo = 'Higiene'
-  AND marca = 'Vetnil'
-  AND descricao = 'Shampoo veterinário para cães e gatos';
+DELETE FROM atendimento_servico
+WHERE id_atendimento = 1
+  AND id_servico = 1;
