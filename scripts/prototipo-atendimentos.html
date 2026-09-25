@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Clínica Veterinária — Atendimentos</title>
+<style>
+  :root{
+    --bg:#f4f6f5; --card:#ffffff; --ink:#1e2a26; --muted:#6b7a74;
+    --brand:#2f7a5d; --brand-dark:#235c46; --line:#e3e8e6; --star:#f5b942;
+    padding-top: env(safe-area-inset-top,0px); padding-bottom: env(safe-area-inset-bottom,0px);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){ --bg:#121815; --card:#1a221e; --ink:#e9efec; --muted:#9caaa4; --line:#2a352f; }
+  }
+  :root[data-theme="dark"]{ --bg:#121815; --card:#1a221e; --ink:#e9efec; --muted:#9caaa4; --line:#2a352f; }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,Segoe UI,Roboto,sans-serif;}
+  header{background:var(--brand);color:#fff;padding:18px 20px;position:sticky;top:0;padding-top:calc(18px + env(safe-area-inset-top,0px));z-index:5;}
+  header h1{margin:0;font-size:1.15rem;}
+  header p{margin:2px 0 0;opacity:.85;font-size:.85rem;}
+  main{max-width:720px;margin:0 auto;padding:16px;}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:14px;}
+  .row{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;}
+  .pet{font-weight:600;font-size:1.02rem;}
+  .meta{color:var(--muted);font-size:.85rem;margin-top:2px;}
+  .badge{background:#eaf3ee;color:var(--brand-dark);font-size:.75rem;padding:3px 9px;border-radius:999px;white-space:nowrap;}
+  :root[data-theme="dark"] .badge, @media (prefers-color-scheme: dark){ .badge{background:#223129;color:#8fd6b2;} }
+  .desc{margin:10px 0;font-size:.92rem;color:var(--ink);}
+  .stars{display:flex;gap:4px;margin:8px 0;}
+  .star{font-size:1.3rem;cursor:pointer;color:var(--line);transition:color .15s;}
+  .star.filled{color:var(--star);}
+  textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:8px;font-family:inherit;font-size:.88rem;resize:vertical;min-height:50px;background:transparent;color:var(--ink);}
+  button{background:var(--brand);color:#fff;border:none;border-radius:8px;padding:8px 14px;font-size:.85rem;cursor:pointer;margin-top:8px;}
+  button:hover{background:var(--brand-dark);}
+  .avaliado{display:flex;align-items:center;gap:6px;color:var(--brand-dark);font-size:.85rem;margin-top:8px;}
+  :root[data-theme="dark"] .avaliado, @media (prefers-color-scheme: dark){ .avaliado{color:#8fd6b2;} }
+</style>
+</head>
+<body>
+<header>
+  <h1>🐾 Atendimentos</h1>
+  <p>Histórico e avaliações — João Silva</p>
+</header>
+<main id="app"></main>
+
+<script>
+const dados = [
+  {pet:"Rex", data:"01/09/2026", vet:"Dr. Carlos Mendes", desc:"Animal avaliado e diagnosticado com quadro leve de indisposição.", avaliado:true, nota:5, comentario:"Atendimento excelente, equipe muito atenciosa!"},
+  {pet:"Mel", data:"01/09/2026", vet:"Dr. Pedro Souza", desc:"Animal avaliado e encaminhado para tratamento dermatológico.", avaliado:false}
+];
+
+function render(){
+  const app = document.getElementById('app');
+  app.innerHTML = '';
+  dados.forEach((item, i) => {
+    const card = document.createElement('div');
+    card.className = 'card';
+
+    let starsHtml = '';
+    for(let s=1; s<=5; s++){
+      starsHtml += `<span class="star" data-idx="${i}" data-val="${s}">★</span>`;
+    }
+
+    card.innerHTML = `
+      <div class="row">
+        <div>
+          <div class="pet">${item.pet}</div>
+          <div class="meta">${item.data} · ${item.vet}</div>
+        </div>
+        <span class="badge">Concluído</span>
+      </div>
+      <div class="desc">${item.desc}</div>
+      ${ item.avaliado ? `
+        <div class="stars">${'★'.repeat(item.nota)}${'☆'.repeat(5-item.nota)}</div>
+        <div class="avaliado">✓ Você avaliou: "${item.comentario}"</div>
+      ` : `
+        <div class="stars" id="stars-${i}">${starsHtml}</div>
+        <textarea placeholder="Deixe um comentário sobre o atendimento (opcional)" id="coment-${i}"></textarea>
+        <button data-idx="${i}">Enviar avaliação</button>
+      `}
+    `;
+    app.appendChild(card);
+  });
+
+  document.querySelectorAll('.star').forEach(star => {
+    star.addEventListener('click', e => {
+      const idx = e.target.dataset.idx, val = +e.target.dataset.val;
+      document.querySelectorAll(`#stars-${idx} .star`).forEach(s => {
+        s.classList.toggle('filled', +s.dataset.val <= val);
+      });
+      document.querySelector(`#stars-${idx}`).dataset.nota = val;
+    });
+  });
+
+  document.querySelectorAll('button[data-idx]').forEach(btn => {
+    btn.addEventListener('click', e => {
+      const i = +e.target.dataset.idx;
+      const notaEl = document.querySelector(`#stars-${i}`);
+      const nota = +(notaEl.dataset.nota || 0);
+      if(!nota){ alert('Selecione uma nota de 1 a 5 estrelas.'); return; }
+      const comentario = document.getElementById(`coment-${i}`).value || '(sem comentário)';
+      dados[i] = {...dados[i], avaliado:true, nota, comentario};
+      render();
+    });
+  });
+}
+render();
+</script>
+</body>
+</html>
