@@ -135,5 +135,5 @@ Essa funcionalidade agrega valor ao sistema por permitir que a clínica acompanh
 
 ### Protótipo de Interface
 
-Foi desenvolvido um protótipo da tela de gerenciamento de atendimentos, já incorporando a funcionalidade de avaliação: [Protótipo de Interface](./prototipo/prototipo-atendimentos.html)
+Foi desenvolvido um protótipo da tela de gerenciamento de atendimentos, já incorporando a funcionalidade de avaliação: [Protótipo de Interface](https://htmlpreview.github.io/?https://github.com/Gabe01165-bit/clinica-veterinaria/blob/main/prototipo/prototipo-atendimentos.html)
 
