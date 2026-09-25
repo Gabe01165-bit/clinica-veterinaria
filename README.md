@@ -101,6 +101,14 @@ erDiagram
         decimal valor_cobrado
     }
 
+    AVALIACAO {
+        int id_avaliacao PK
+        int id_atendimento FK, UK
+        int nota
+        text comentario
+        date data_avaliacao
+    }
+
     CLIENTE ||--o{ ANIMAL : possui
     CLIENTE ||--o{ ATENDIMENTO : participa
     CLIENTE o|--o| ATENDENTE : tambem_e
@@ -114,4 +122,6 @@ erDiagram
 
     ATENDIMENTO ||--o{ ATENDIMENTO_SERVICO : possui
     SERVICO ||--o{ ATENDIMENTO_SERVICO : realizado_em
+
+    ATENDIMENTO ||--o| AVALIACAO : recebe
 ```
