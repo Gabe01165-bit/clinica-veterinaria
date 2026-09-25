@@ -125,3 +125,15 @@ erDiagram
 
     ATENDIMENTO ||--o| AVALIACAO : recebe
 ```
+## Inovação: Avaliação de Atendimentos
+
+Como elemento inovador desta fase, foi adicionada a funcionalidade de **avaliação de atendimentos**, dentro da categoria de Interações Sociais.
+
+Após cada atendimento, o tutor pode avaliar o serviço prestado atribuindo uma nota de 1 a 5 estrelas e, opcionalmente, deixar um comentário. Essa informação é armazenada na nova tabela `AVALIACAO`, relacionada 1:1 com `ATENDIMENTO` (cada atendimento pode ter no máximo uma avaliação).
+
+Essa funcionalidade agrega valor ao sistema por permitir que a clínica acompanhe a satisfação dos tutores, identifique pontos de melhoria no atendimento e reforce a confiança dos clientes na qualidade do serviço prestado.
+
+### Protótipo de Interface
+
+Foi desenvolvido um protótipo da tela de gerenciamento de atendimentos, já incorporando a funcionalidade de avaliação: [Protótipo de Interface](./prototipo/prototipo-atendimentos.html)
+
